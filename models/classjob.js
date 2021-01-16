@@ -6,8 +6,8 @@ const Schema = mongoose.Schema;
 
 // define User Schema
 const classJobSchema = new Schema({
-    className: {type: String},
-    classLevel: {type: Number},
+    classjobName: {type: String},
+    classjobLevel: {type: Number},
     currentExp: {type: Number},
     maxExp: {type: Number}
 });
