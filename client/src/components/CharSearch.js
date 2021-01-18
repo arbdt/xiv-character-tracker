@@ -79,7 +79,7 @@ render(){
                             <li key={entry.ID}>
                                 <img src={entry.Avatar} alt={entry.Name}/>
                                 &emsp; {entry.Name}
-                                &emsp; <button href={"/character/" + entry.ID}>Select</button>
+                                &emsp; <a href={"/character/" + entry.ID}>Select</a>
                             </li>
                         );
                     })
