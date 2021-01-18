@@ -11,15 +11,14 @@ class CharSearch extends Component {
         // state
         this.state = {
             charName: "",
-            serverName: ""
+            serverName: "",
+            searchResults: []
         };
 
         // bind methods
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
-
-    resultHandler = this.props.resultHandler;
 
     // handle input change
     handleInputChange(event) {
@@ -48,46 +47,46 @@ class CharSearch extends Component {
     handleSubmit(e) {
         e.preventDefault();
 
-        // values for second search
-        let charId = 0;
-        let charData = {};
-
-        // run first search based on user input
+        // run search based on user input
+        console.log(`searching for ${this.state.charName} of ${this.state.serverName}`);
         xiv.character.search(this.state.charName, {server: this.state.serverName}).then( (response) => {
             console.log(response);
-            charId = response.Results[0].ID;
-            console.log(`charId is ${charId}`);
-        }).then( () => {
-            // get specific character data in second search
-            xiv.character.get(charId).then( function (response){
-                charData = response.Character;
-            }).then( () => {
-                // save the desired data points
-                let newChar = {
-                    name: charData.Name,
-                    portrait: charData.Portrait
-                }
-                console.log(newChar);
-            });
+            this.setState({searchResults: response.Results});
         });
     }
 
 // define component
 render(){
     return (
-        <form className="form-group">
-            <label htmlFor="charSearchInput">Character Name: </label>
-            <input type="text" id="charSearchInput" name="charName" onChange={this.handleInputChange}/>
-            <br/>
-            <label htmlFor="charServerInput">Server: </label>
-            <input list="xivServers" id="charServerInput" name="serverName" onChange={this.handleInputChange}/>    
-                <datalist id="xivServers">
-                    {this.serverList.map( (server) => {
-                        return (<option key={server} value={server}/>);
-                    })}
-                </datalist>
-            <button type="submit" onClick={this.handleSubmit}>Search</button>
-        </form>
+        <section>
+            <form className="form-group">{/* form for searching via API */}
+                <label htmlFor="charSearchInput">Character Name: </label>
+                <input type="text" id="charSearchInput" name="charName" onChange={this.handleInputChange}/>
+                <br/>
+                <label htmlFor="charServerInput">Server: </label>
+                <input list="xivServers" id="charServerInput" name="serverName" onChange={this.handleInputChange}/>    
+                    <datalist id="xivServers">
+                        {this.serverList.map( (server) => {
+                            return (<option key={server} value={server}/>);
+                        })}
+                    </datalist>
+                <button type="submit" onClick={this.handleSubmit}>Search</button>
+            </form>
+            <div>
+                <ul className="list-group"> {/* list to display results of search */}
+                    {this.state.searchResults !== undefined ? this.state.searchResults.map( (entry) => {
+                        return (
+                            <li key={entry.ID}>
+                                <img src={entry.Avatar} alt={entry.Name}/>
+                                &emsp; {entry.Name}
+                                &emsp; <button href={"/character/" + entry.ID}>Select</button>
+                            </li>
+                        );
+                    })
+                    : <></>}
+                </ul>
+            </div>
+        </section>
     );
 }
 
