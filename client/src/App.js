@@ -15,7 +15,7 @@ function App() {
         <main className="container">
           <Route path="/character/:charId" component={CharacterSheet}></Route>
           <Route path="/user" component={UserPage}></Route>
-          <Route path= "/search" component={CharSearch}></Route>
+          <Route exact path= "/" component={CharSearch}></Route>
         </main>
         <Footer/>
       </BrowserRouter>
