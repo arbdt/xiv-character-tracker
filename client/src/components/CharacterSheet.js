@@ -17,14 +17,44 @@ const getXivapiData = async (char_id) => {
     }
 }
 
+// call API to get existing information from server
+const getMongooseData = async (character) => {
+    try {
+        let response = await axios.get(`/api/character/${character}`);
+        if (response.data !== null){
+            // return the data if it exists
+            console.log(response.data);
+            return response.data;
+        }
+    } catch (error){
+        console.error(error);
+    }
+}
+
+// function to save data
+function saveCharData(character){
+    // if new data, POST
+    axios.post(`/api/character/`, character);
+
+    // if old data exists, PUT
+}
+
+/*/function for clicking
+function handleClick(event){
+    event.preventDefault();
+
+    //send fresh data to database server
+    saveCharData(freshCharacter);
+}*/
+
 // define component
 function CharacterSheet(props){
     // vars
     let characterId = props.match.params.charId; // get charId from URL
     
-    // useState to store character data
+    // useState to store xivapi character data
     let [freshCharacter, setFreshCharacter] = useState({
-        charId: "",
+        charId: 0,
         charName: "",
         charServer: "",
         charPortrait: "",
@@ -35,13 +65,27 @@ function CharacterSheet(props){
         mountCount: 0,
     });
 
-    // call API to get existing information from server
+    // useState to store database character data
+    let [oldCharacter, setOldCharacter] = useState({
+        charId: 0,
+        charName: "",
+        charServer: "",
+        charPortrait: "",
+        charClasses: [],
+        achievementCount: 0,
+        achievementPoints: 0,
+        minionCount: 0,
+        mountCount: 0,
+    });
+
+
 
     // useEffect to call XIVAPI for new information
     useEffect( () =>{
+
         // get XIVAPI data
         getXivapiData(characterId).then( (result) => {
-            console.log(result);
+            //console.log(result);
             // make new character object from new data
             let newCharData = {
                 charId: characterId,
@@ -55,6 +99,13 @@ function CharacterSheet(props){
             // update state with new data
             setFreshCharacter(newCharData);
         });
+
+        // get database data
+        getMongooseData(characterId).then( result => {
+            let oldCharData = result;
+            setOldCharacter(oldCharData);
+        });
+    
     },[characterId]);
 
     // component output    
@@ -64,8 +115,10 @@ function CharacterSheet(props){
             <div className="card-body">
                 <div className="row">
                     <div className="col">
-                        <p>Minions: {freshCharacter.minionCount}</p>
-                        <p>Mounts: {freshCharacter.mountCount}</p>
+                        <p>Minions: {freshCharacter.minionCount} {oldCharacter !== undefined && freshCharacter.minionCount > oldCharacter.minionCount ?
+                            <span className="trackedChange"> +{freshCharacter.minionCount - oldCharacter.minionCount}</span> : <></>}</p>
+                        <p>Mounts: {freshCharacter.mountCount} {oldCharacter !== undefined && freshCharacter.mountCount > 0 ?
+                            <span className="trackedChange"> +{freshCharacter.mountCount - oldCharacter.mountCount}</span> : <></>}</p>
                     </div>
                 </div>
                 <div className="row">
@@ -80,6 +133,7 @@ function CharacterSheet(props){
                         }) : <></>}
                     </div>
                 </div>
+                <button onClick={() => saveCharData(freshCharacter)}>Save and Refresh</button>
             </div>
         </div>
     )
