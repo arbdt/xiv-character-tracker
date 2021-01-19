@@ -5,6 +5,7 @@ import {BrowserRouter, Route} from "react-router-dom";
 import CharacterSheet from "./components/CharacterSheet";
 import UserPage from "./components/UserPage";
 import CharSearch from "./components/CharSearch";
+import Main from "./components/Main";
 
 // define component
 function App() {
@@ -15,7 +16,8 @@ function App() {
         <main className="container">
           <Route path="/character/:charId" component={CharacterSheet}></Route>
           <Route path="/user" component={UserPage}></Route>
-          <Route exact path= "/" component={CharSearch}></Route>
+          <Route path="/search" component={CharSearch}></Route>
+          <Route exact path= "/" component={Main}></Route>
         </main>
         <Footer/>
       </BrowserRouter>
