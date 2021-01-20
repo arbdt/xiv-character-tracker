@@ -1,7 +1,7 @@
 // imports
 const express = require("express");
 const router = express.Router();
-const User = require("../models/user");
+const {User} = require("../models/user");
 const characterController = require("../controllers/characterController");
 const {Character} = require("../models/character");
 
@@ -10,8 +10,8 @@ const {Character} = require("../models/character");
 // USER API -----
 
 // get user-related records
-router.get("/api/user/", function(request, response){
-    let userIdent = request.body.userId;
+router.get("/api/user/:userId", function(request, response){
+    let userIdent = request.params.userId;
     User.findOne({userIdentity: userIdent}).then( (result) => {
         response.json(result);
     });
@@ -31,11 +31,26 @@ router.get("/api/character/:characterId", function( request, response){
     Character.findOne({charId: idNum}).then( (result) => {
         response.json(result);
     });
+});
 
+// get character data subset for user page list
+router.get("/api/user/character/:characterId", function (request, response){
+    let idNum = parseInt(request.params.characterId);
+    Character.find({charId: idNum}).then( (result) => {
+        if (result !== null){
+            let charSubset = {
+                charAvatar: result.charPortrait,
+                charId: result.charId,
+                charName: result.charName,
+                charServer: result.charServer
+            }
+            response.json(charSubset);
+        }
+    });
 });
 
 // post new character data
-router.post("/api/character/", function (request, response){
+router.post("/api/character", function (request, response){
     let newCharacter = {
         charId: request.body.charId,
         charName: request.body.charName,
