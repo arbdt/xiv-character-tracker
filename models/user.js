@@ -3,17 +3,16 @@
 // imports
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const characterSchema = require("./character");
+const {CharacterSchema} = require("./character");
 
 // define User Schema
-const userSchema = new Schema({
-    username: {type: String, required: true},
-    password: {type: String, required: true},
-    savedCharacter: [characterSchema]
+const UserSchema = new Schema({
+    userIdentity: {type: String, required: true},
+    savedCharacters: [Number]
 });
 
 // define model
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model("User", UserSchema);
 
 // export
-module.exports = User;
+module.exports = {User, UserSchema};
