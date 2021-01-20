@@ -6,11 +6,12 @@ const Schema = mongoose.Schema;
 const classJobSchema = require("./classjob");
 
 // define User Schema
-const characterSchema = new Schema({
+const CharacterSchema = new Schema({
     charId: {type: Number, require: true},
     charName: {type: String, required: true},
     charServer: {type: String, required: true},
-    charPortrait: {type: String},
+    charAvatar: String,
+    charPortrait: String,
     charClasses: [classJobSchema],
     achievementCount: {type: Number, default: 0},
     achievementPoints: {type: Number, default: 0},
@@ -20,7 +21,7 @@ const characterSchema = new Schema({
 });
 
 // define model
-const Character = mongoose.model("Character", characterSchema);
+const Character = mongoose.model("Character", CharacterSchema);
 
 // export
-module.exports = {characterSchema, Character};
+module.exports = {CharacterSchema, Character};
