@@ -1,4 +1,7 @@
+// this is for the header menu bar
+
 // imports
+import React from "react";
 import {Link} from "react-router-dom";
 import logo from "../logo.png";
 
@@ -16,7 +19,7 @@ function Header(){
                         <Link className="nav-link" to="/search">Search</Link>
                     </li>
                     <li className="nav-item">
-                        <Link to="/user" className="nav-link" userId="">User Page</Link>
+                        <Link to={`/user/test`} className="nav-link">User Page</Link>
                     </li>
                 </ul>
             </nav>

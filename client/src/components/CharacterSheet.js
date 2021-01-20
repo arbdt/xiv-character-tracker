@@ -1,7 +1,7 @@
 // this component is for a page or section to display the retrieved and/or saved details for a specified character
 
 // imports
-import {React, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import ClassJob from "./ClassJob";
 import axios from "axios";
 import XIVAPI from "xivapi-js";
@@ -34,7 +34,7 @@ const getMongooseData = async (character) => {
 // function to save data
 function saveCharData(character){
     // if new data, POST
-    axios.post(`/api/character/`, character);
+    axios.post(`/api/character`, character);
 
     // if old data exists, PUT
 }
@@ -57,7 +57,7 @@ function CharacterSheet(props){
         charId: 0,
         charName: "",
         charServer: "",
-        charPortrait: "",
+        charAvatar: "",
         charClasses: [],
         achievementCount: 0,
         achievementPoints: 0,
@@ -70,7 +70,7 @@ function CharacterSheet(props){
         charId: 0,
         charName: "",
         charServer: "",
-        charPortrait: "",
+        charAvatar: "",
         charClasses: [],
         achievementCount: 0,
         achievementPoints: 0,
@@ -91,7 +91,7 @@ function CharacterSheet(props){
                 charId: characterId,
                 charName: result.Character.Name,
                 charServer: result.Character.Server,
-                charPortrait: result.Character.Portrait,
+                charAvatar: result.Character.Avatar,
                 charClasses: result.Character.ClassJobs,
                 minionCount: result.Minions.length,
                 mountCount: result.Mounts.length
@@ -117,13 +117,13 @@ function CharacterSheet(props){
                     <div className="col">
                         <p>Minions: {freshCharacter.minionCount} {oldCharacter !== undefined && freshCharacter.minionCount > oldCharacter.minionCount ?
                             <span className="trackedChange"> +{freshCharacter.minionCount - oldCharacter.minionCount}</span> : <></>}</p>
-                        <p>Mounts: {freshCharacter.mountCount} {oldCharacter !== undefined && freshCharacter.mountCount > 0 ?
+                        <p>Mounts: {freshCharacter.mountCount} {oldCharacter !== undefined && freshCharacter.mountCount > oldCharacter.mountCount ?
                             <span className="trackedChange"> +{freshCharacter.mountCount - oldCharacter.mountCount}</span> : <></>}</p>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col">
-                        <img src={freshCharacter.charPortrait} alt={freshCharacter.charName}/>
+                        <img src={freshCharacter.charAvatar} alt={freshCharacter.charName}/>
                     </div>
                     <div className="col">
                         {freshCharacter.charClasses !== undefined? freshCharacter.charClasses.map( (classJob) => {

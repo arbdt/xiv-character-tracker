@@ -1,5 +1,8 @@
 // this component will display data for each of a characters class/jobs, specifically name and progress
 
+//imports
+import React from "react";
+
 // component definition
 function ClassJob({classJob}){
     
@@ -8,7 +11,7 @@ function ClassJob({classJob}){
             <div className="card-body">
                 <h4>{classJob.UnlockedState.Name}</h4>
                 <p>Level: {classJob.Level} {0 !== undefined && 0 < classJob.Level ?
-                <span className="trackedChange"> &#9650;{classJob.Level - 0}</span> : <></>}</p>
+                <span className="trackedChange"> +{classJob.Level - 0}</span> : <></>}</p>
                 <meter value={classJob.ExpLevel} max={classJob.ExpLevelMax}>
                     {classJob.ExpLevel} / {classJob.ExpLevelMax}
                 </meter>

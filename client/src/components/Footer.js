@@ -1,3 +1,6 @@
+// imports
+import React from "react";
+
 // define component
 function Footer(){
     return (

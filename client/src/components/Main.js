@@ -1,6 +1,7 @@
 // this component represents the initial landing page of the website
 
 // imports
+import React from "react";
 import CharSearch from "./CharSearch";
 
 // component definition
@@ -13,7 +14,7 @@ function Main(){
             <p className="lead">Welcome to the X|V Character Tracker. Use the form below to find and display the profile of a character.</p>
             <hr className="my-4"/>
             <p>Log in using [insert authorisation service here] to save a character's current stats for comparison.</p>
-            <p className="lead"><CharSearch></CharSearch></p>
+            <div className="lead"><CharSearch></CharSearch></div>
         </div>
     );
 }

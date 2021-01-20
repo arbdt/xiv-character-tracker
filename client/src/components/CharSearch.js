@@ -1,5 +1,5 @@
 // This component is a search form in which users can enter a character name and choose a server name, which will be passed to the API.
-import { Component } from "react";
+import React, {Component} from "react";
 import XIVAPI from "xivapi-js";
 const xiv = new XIVAPI();
 
