@@ -10,8 +10,11 @@ const {Character} = require("../models/character");
 // USER API -----
 
 // get user-related records
-router.get("/api/user/:userId", function(request, repsonse){
-    User.find();
+router.get("/api/user/", function(request, response){
+    let userIdent = request.body.userId;
+    User.findOne({userIdentity: userIdent}).then( (result) => {
+        response.json(result);
+    });
 });
 
 // create user-related records
@@ -37,7 +40,7 @@ router.post("/api/character/", function (request, response){
         charId: request.body.charId,
         charName: request.body.charName,
         charServer: request.body.charServer,
-        charPortrait: request.body.charPortrait,
+        charAvatar: request.body.charAvatar,
         charClasses: request.body.charClasses,
         minionCount: request.body.minionCount,
         mountCount: request.body.mountCount
