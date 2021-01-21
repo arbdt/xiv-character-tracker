@@ -131,7 +131,7 @@ function CharacterSheet(props){
                     <div className="col">
                         {freshCharacter.charClasses !== undefined? freshCharacter.charClasses.map( (classJob) => {
                             return (
-                                <ClassJob classJob={classJob} key={classJob.JobID}></ClassJob>
+                                <ClassJob classJob={classJob} key={classJob.classjobName}></ClassJob>
                             );
                         }) : <></>}
                     </div>
