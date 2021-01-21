@@ -24,11 +24,11 @@ function setUserChars(userToken){
 }
 
 // call API to get character information from server
-const getMongooseData = async (charId) => {
+const getMongooseData = async (charIdList) => {
     try {
-        let response = await axios.get(`/api/character/${charId}`);
+        let response = await axios.post(`/api/user/characters`, {data: charIdList});
         if (response.data !== null){
-            console.log(`The result for ${charId} is ${JSON.stringify(response.data)}`);
+            console.log(`The result is ${JSON.stringify(response.data)}`);
             return response.data;
         }
     } catch (error){
@@ -58,7 +58,7 @@ function UserPage(props){
         // get character data
         if (userInfo !== undefined && userInfo.savedCharacters !== undefined){
             console.log(`retrieving character data`);
-            getMongooseData(userInfo.savedCharacters[0]).then(output => {
+            getMongooseData(userInfo.savedCharacters).then(output => {
                 setRegisteredChars(registeredChars => [...registeredChars, output]);
             });
         }
@@ -74,13 +74,13 @@ function UserPage(props){
 
         <div>
             <ul className="list-group"> {/* list to display results of search */}
-                {registeredChars.length !== 0 ? registeredChars.map( (entry) => {
+                {registeredChars.length !== 0 && registeredChars[0] !== undefined ? registeredChars.map( (entry) => {
                     return (
-                        <li key={entry.charId}>
+                        <li key={entry.charId} className="list-group-item">
                             <img src={entry.charAvatar} alt={entry.charName} width="64" height="64"/>
                             &emsp; {entry.charName} &emsp; {entry.charServer}
-                            &emsp; <a href={"/character/" + entry.charId}>View Data</a>
-                            &emsp; <button onClick={() => {}}>Stop Tracking</button>
+                            &emsp; <a href={"/character/" + entry.charId}><i class="fas fa-eye"></i> View</a>
+                            &emsp; <button onClick={() => {}}><i class="fas fa-user-slash"></i> Untrack</button>
                         </li>
                     );
                 })
