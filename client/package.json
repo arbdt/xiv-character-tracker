@@ -1,5 +1,5 @@
 {
-  "name": "cms",
+  "name": "xiv-tracker",
   "version": "0.1.0",
   "private": true,
   "proxy": "http://localhost:3001/",
@@ -8,7 +8,8 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "3.4.3"
+    "react-scripts": "3.4.3",
+    "xivapi-js": "^0.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -16,10 +17,16 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ]
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
 }
