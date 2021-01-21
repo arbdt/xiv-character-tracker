@@ -83,7 +83,7 @@ render(){
                             <li className="list-group-item" key={entry.ID}>
                                 <img src={entry.Avatar} alt={entry.Name} width="64" height="64"/>
                                 &emsp; {entry.Name}
-                                &emsp; <a href={"/character/" + entry.ID}>Select</a>
+                                &emsp; <a href={"/character/" + entry.ID}><i class="fas fa-eye"></i> View</a>
                             </li>
                         );
                     })
