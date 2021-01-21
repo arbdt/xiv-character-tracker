@@ -1,5 +1,7 @@
 // this component will display data for each of a characters class/jobs, specifically name and progress
 
+// currently it does not incporporate old/existing datahowever
+
 //imports
 import React from "react";
 
@@ -9,14 +11,14 @@ function ClassJob({classJob}){
     return (
         <div className="card">
             <div className="card-body">
-                <h4>{classJob.UnlockedState.Name}</h4>
-                <p>Level: {classJob.Level} {0 !== undefined && 0 < classJob.Level ?
-                <span className="trackedChange"> +{classJob.Level - 0}</span> : <></>}</p>
-                <meter value={classJob.ExpLevel} max={classJob.ExpLevelMax}>
-                    {classJob.ExpLevel} / {classJob.ExpLevelMax}
+                <h4>{classJob.classjobName}</h4>
+                <p>Level: {classJob.classjobLevel} {0 !== undefined && 0 < classJob.classjobLevel ?
+                <span className="trackedChange"> +{classJob.classjobLevel - 0}</span> : <></>}</p>
+                <meter value={classJob.currentExp} max={classJob.maxExp}>
+                    {classJob.currentExp} / {classJob.maxExp}
                 </meter>
-                <p>Experience: {classJob.ExpLevel} / {classJob.ExpLevelMax} {classJob.Level == classJob.Level && classJob.ExpLevel > 0 ?
-                <span className="trackedChange"> +{classJob.ExpLevel - 0}</span> : <></>}</p>
+                <p>Experience: {classJob.currentExp} / {classJob.maxExp} {classJob.classjobLevel === classJob.classjobLevel && classJob.currentExp > 0 ?
+                <span className="trackedChange"> +{classJob.currentExp - 0}</span> : <></>}</p>
             </div>
         </div>
     );
