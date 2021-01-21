@@ -2,7 +2,6 @@
 const express = require("express");
 const router = express.Router();
 const {User} = require("../models/user");
-const characterController = require("../controllers/characterController");
 const {Character} = require("../models/character");
 
 // ROUTES DEFINITIONS -----
@@ -33,19 +32,16 @@ router.get("/api/character/:characterId", function( request, response){
     });
 });
 
-// get character data subset for user page list
-router.get("/api/user/character/:characterId", function (request, response){
-    let idNum = parseInt(request.params.characterId);
-    Character.find({charId: idNum}).then( (result) => {
-        if (result !== null){
-            let charSubset = {
-                charAvatar: result.charPortrait,
-                charId: result.charId,
-                charName: result.charName,
-                charServer: result.charServer
-            }
-            response.json(charSubset);
-        }
+// get character data for user page list. when it works in Postman it doesn't work live and vice versa `\_('_')_/`
+router.post("/api/user/characters", function (request, response){
+    let receivedNums = request.body.data;
+    console.log(receivedNums);
+    let idNumList = [];
+    for (let i = 0; i < receivedNums.length; i++){
+        idNumList.push(parseInt(receivedNums[i]));
+    }
+    Character.find({charId: {$in: [idNumList]}}).then( (result) => {
+        response.json(result);
     });
 });
 
