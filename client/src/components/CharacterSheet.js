@@ -39,14 +39,6 @@ function saveCharData(character){
     // if old data exists, PUT
 }
 
-/*/function for clicking
-function handleClick(event){
-    event.preventDefault();
-
-    //send fresh data to database server
-    saveCharData(freshCharacter);
-}*/
-
 // define component
 function CharacterSheet(props){
     // vars
@@ -58,6 +50,7 @@ function CharacterSheet(props){
         charName: "",
         charServer: "",
         charAvatar: "",
+        charPortrait: "",
         charClasses: [],
         achievementCount: 0,
         achievementPoints: 0,
@@ -71,6 +64,7 @@ function CharacterSheet(props){
         charName: "",
         charServer: "",
         charAvatar: "",
+        charPortrait: "",
         charClasses: [],
         achievementCount: 0,
         achievementPoints: 0,
@@ -85,14 +79,23 @@ function CharacterSheet(props){
 
         // get XIVAPI data
         getXivapiData(characterId).then( (result) => {
-            //console.log(result);
+            console.log(result);
+            let jobList = result.Character.ClassJobs.map( (job) => {
+                return {
+                    charId: characterId,
+                    classjobName: job.UnlockedState.Name,
+                    classjobLevel: job.Level,
+                    currentExp: job.ExpLevel,
+                    maxExp: job.ExpLevelMax}
+            });
             // make new character object from new data
             let newCharData = {
                 charId: characterId,
                 charName: result.Character.Name,
                 charServer: result.Character.Server,
                 charAvatar: result.Character.Avatar,
-                charClasses: result.Character.ClassJobs,
+                charPortrait: result.Character.Portrait,
+                charClasses: jobList,
                 minionCount: result.Minions.length,
                 mountCount: result.Mounts.length
             };
@@ -133,7 +136,7 @@ function CharacterSheet(props){
                         }) : <></>}
                     </div>
                 </div>
-                <button onClick={() => saveCharData(freshCharacter)}>Save and Refresh</button>
+                <button onClick={() => saveCharData(freshCharacter)}><i class="fas fa-save"></i> Save</button>
             </div>
         </div>
     )
