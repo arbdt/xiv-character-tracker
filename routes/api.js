@@ -18,9 +18,12 @@ router.get("/api/user/:userId", function(request, response){
 
 // create user-related records
 
-// update records
-
-// delete records
+// update records (remove)
+router.put("/api/user/characters/remove", function (request, response){
+    User.findOneAndUpdate({userIdentity: request.body.userId},{savedCharacters: request.body.idList}, {new: true}).then( result => {
+        response.json(result);
+    });
+});
 
 // CHARACTER API -----
 

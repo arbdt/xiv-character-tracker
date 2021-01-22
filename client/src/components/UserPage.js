@@ -19,8 +19,23 @@ const getUserData = async (userToken) => {
 }
 
 // function to update user-associated content (for removing a tracked character)
-function setUserChars(userToken){
+const removeUserChar = async (charId) =>{
+    let userId = userInfo.userIdentity;
+    let newCharList = userInfo.savedCharacters.filter(function (idNumber){
+        return idNumber !== charId;
+    });
+    try {
+        let response = await axios.put("/api/user/characters/remove", {userId: userId, idList: newCharList});
+        if (response.data !== null){
+            return response.data;
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
 
+function handleClickRemove(event){
+    event.preventDefault();
 }
 
 // call API to get character information from server
@@ -35,6 +50,8 @@ const getMongooseData = async (charIdList) => {
         console.error(error);
     }
 }
+
+
 
 // define component
 function UserPage(props){
@@ -80,7 +97,7 @@ function UserPage(props){
                             <img src={entry.charAvatar} alt={entry.charName} width="64" height="64"/>
                             &emsp; {entry.charName} &emsp; {entry.charServer}
                             &emsp; <a href={"/character/" + entry.charId}><i class="fas fa-eye"></i> View</a>
-                            &emsp; <button onClick={() => {}}><i class="fas fa-user-slash"></i> Untrack</button>
+                            &emsp; <button onClick={()=>removeUserChar(entry.charId)}><i className="fas fa-user-slash"></i> Untrack</button>
                         </li>
                     );
                 })
