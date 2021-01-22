@@ -59,22 +59,22 @@ class CharSearch extends Component {
 render(){
     return (
         <div className="card m-4">
-            <form className="form card-body">{/* form for searching via API */}
+            <form className="form card-body" onSubmit={this.handleSubmit}>{/* form for searching via API */}
                 <h3 className="card-title">Search for a character</h3>
                 <div className="form-group">
                     <label htmlFor="charSearchInput">Character Name: </label>
-                    <input className="form-control" type="text" id="charSearchInput" name="charName" onChange={this.handleInputChange}/>
+                    <input className="form-control" type="text" id="charSearchInput" name="charName" onChange={this.handleInputChange} required/>
                 </div>
                 <div className="form-group">
                     <label htmlFor="charServerInput">Server: </label>
-                    <input className="form-control" list="xivServers" id="charServerInput" name="serverName" onChange={this.handleInputChange}/>    
+                    <input className="form-control" list="xivServers" id="charServerInput" name="serverName" onChange={this.handleInputChange} required/>    
                         <datalist id="xivServers">
                             {this.serverList.map( (server) => {
                                 return (<option key={server} value={server}/>);
                             })}
                         </datalist>
                 </div>
-                <button className="btn" type="submit" onClick={this.handleSubmit}>Search</button>
+                <button className="btn" type="submit"><i className="fas fa-search"></i> Search</button>
             </form>
             <div>
                 <ul className="list-group"> {/* list to display results of search */}
@@ -83,7 +83,7 @@ render(){
                             <li className="list-group-item" key={entry.ID}>
                                 <img src={entry.Avatar} alt={entry.Name} width="64" height="64"/>
                                 &emsp; {entry.Name}
-                                &emsp; <a href={"/character/" + entry.ID}><i class="fas fa-eye"></i> View</a>
+                                &emsp; <a href={"/character/" + entry.ID}><i className="fas fa-eye"></i> View</a>
                             </li>
                         );
                     })
