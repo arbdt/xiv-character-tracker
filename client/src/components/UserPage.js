@@ -34,8 +34,12 @@ const removeUserChar = async (charId) =>{
     }
 }
 
+// function to handle clicking on "remove"
 function handleClickRemove(event){
     event.preventDefault();
+
+    // call removeuserchar
+    removeUserChar(event.target.dataset.char);
 }
 
 // call API to get character information from server
@@ -97,7 +101,7 @@ function UserPage(props){
                             <img src={entry.charAvatar} alt={entry.charName} width="64" height="64"/>
                             &emsp; {entry.charName} &emsp; {entry.charServer}
                             &emsp; <a href={"/character/" + entry.charId}><i class="fas fa-eye"></i> View</a>
-                            &emsp; <button onClick={()=>removeUserChar(entry.charId)}><i className="fas fa-user-slash"></i> Untrack</button>
+                            &emsp; <button onClick={handleClickRemove} data-char={entry.charId}><i className="fas fa-user-slash"></i> Untrack</button>
                         </li>
                     );
                 })
