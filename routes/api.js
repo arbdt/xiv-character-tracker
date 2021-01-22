@@ -45,20 +45,42 @@ router.post("/api/user/characters", function (request, response){
     });
 });
 
-// post new character data
+// post new character data, or update if already exists
 router.post("/api/character", function (request, response){
     let newCharacter = {
         charId: request.body.charId,
         charName: request.body.charName,
         charServer: request.body.charServer,
         charAvatar: request.body.charAvatar,
+        charPortrait: request.body.charPortrait,
         charClasses: request.body.charClasses,
         minionCount: request.body.minionCount,
-        mountCount: request.body.mountCount
+        mountCount: request.body.mountCount,
+        dateUpdated: Date.now()
     };
 
-    Character.create(newCharacter).then( result => {
-        response.json(result);
+    Character.findOne({charId: request.body.charId}).then(result => {
+        if (result !== null){
+            // if entry exists, update properties
+            result.charName = request.body.charName;
+            result.charServer = request.body.charServer;
+            result.charAvatar = request.body.charAvatar;
+            result.charPortrait = request.body.charPortrait;
+            result.charClasses = request.body.charClasses;
+            result.minionCount = request.body.minionCount;
+            result.mountCount = request.body.mountCount;
+            result.dateUpdated = Date.now();
+            
+            // save changes
+            result.save().then( output => {
+                response.json(output);
+            });
+        }
+        else if (result === null){
+            Character.create(newCharacter).then( result => {
+                response.json(result);
+            });
+        }
     });
 });
 
