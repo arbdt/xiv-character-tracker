@@ -82,6 +82,7 @@ function CharacterSheet(props){
                 return {
                     charId: characterId,
                     classjobName: job.UnlockedState.Name,
+                    classjobFullname: job.Name,
                     classjobLevel: job.Level,
                     currentExp: job.ExpLevel,
                     maxExp: job.ExpLevelMax}
@@ -133,7 +134,7 @@ function CharacterSheet(props){
                             let oldJob = {};
                             if (oldCharacter !== undefined){
                                 for (const job of oldCharacter.charClasses){
-                                    if (job.classjobName === classJob.classjobName){
+                                    if (job.classjobFullname === classJob.classjobFullname){
                                         oldJob = job;
                                     }
                                 }

@@ -8,6 +8,7 @@ const Schema = mongoose.Schema;
 const ClassJobSchema = new Schema({
     charId: Number,
     classjobName: String,
+    classjobFullname: String,
     classjobLevel: {type: Number, default: 0},
     currentExp: {type: Number, default: 0},
     maxExp: {type: Number, default: 0}
