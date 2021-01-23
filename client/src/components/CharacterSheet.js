@@ -33,10 +33,8 @@ const getMongooseData = async (character) => {
 
 // function to save data
 function saveCharData(character){
-    // if new data, POST
+// post character data to db
     axios.post(`/api/character`, character);
-
-    // if old data exists, PUT
 }
 
 // define component
@@ -114,8 +112,10 @@ function CharacterSheet(props){
     // component output    
     return(
         <div className="card characterSheet">
-            <h3 className="card-title">{freshCharacter.charName} of {freshCharacter.charServer}</h3>
+            <h3 className="card-title">{freshCharacter.charName} of {freshCharacter.charServer} </h3>
+            
             <div className="card-body">
+            <button onClick={() => saveCharData(freshCharacter)}><i className="fas fa-save"></i> Save</button>
                 <div className="row">
                     <div className="col">
                         <p>Minions: {freshCharacter.minionCount} {oldCharacter !== undefined && freshCharacter.minionCount > oldCharacter.minionCount ?
@@ -130,13 +130,21 @@ function CharacterSheet(props){
                     </div>
                     <div className="col">
                         {freshCharacter.charClasses !== undefined? freshCharacter.charClasses.map( (classJob) => {
+                            let oldJob = {};
+                            if (oldCharacter !== undefined){
+                                for (const job of oldCharacter.charClasses){
+                                    if (job.classjobName === classJob.classjobName){
+                                        oldJob = job;
+                                    }
+                                }
+                            }
                             return (
-                                <ClassJob classJob={classJob} key={classJob.classjobName}></ClassJob>
+                                <ClassJob newJobData={classJob} oldJobData={oldJob} key={classJob.classjobName}></ClassJob>
                             );
                         }) : <></>}
                     </div>
                 </div>
-                <button onClick={() => saveCharData(freshCharacter)}><i class="fas fa-save"></i> Save</button>
+                
             </div>
         </div>
     )
