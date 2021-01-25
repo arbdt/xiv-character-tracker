@@ -77,7 +77,7 @@ function CharacterSheet(props){
 
         // get XIVAPI data
         getXivapiData(characterId).then( (result) => {
-            console.log(result);
+            //console.log(result);
             let jobList = result.Character.ClassJobs.map( (job) => {
                 return {
                     charId: characterId,
@@ -113,7 +113,7 @@ function CharacterSheet(props){
     // component output    
     return(
         <div className="card characterSheet">
-            <h3 className="card-title">{freshCharacter.charName} of {freshCharacter.charServer} </h3>
+            <h3 className="card-title">{freshCharacter.charName !== ""?  `${freshCharacter.charName} of ${freshCharacter.charServer}` : `Loading data...`} </h3>
             
             <div className="card-body">
             <button onClick={() => saveCharData(freshCharacter)}><i className="fas fa-save"></i> Save</button>
