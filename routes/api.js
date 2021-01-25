@@ -18,12 +18,14 @@ router.get("/api/user/:userId", function(request, response){
 
 // create user-related records
 
-// update records (remove)
+// update records (remove a character from user)
 router.put("/api/user/characters/remove", function (request, response){
     User.findOneAndUpdate({userIdentity: request.body.userId},{savedCharacters: request.body.idList}, {new: true}).then( result => {
         response.json(result);
     });
 });
+
+// update record (add a character to user)
 
 // CHARACTER API -----
 
@@ -35,15 +37,10 @@ router.get("/api/character/:characterId", function( request, response){
     });
 });
 
-// get character data for user page list. when it works in Postman it doesn't work live and vice versa `\_('_')_/`
+// get character data for user page list
 router.post("/api/user/characters", function (request, response){
     let receivedNums = request.body.data;
-    console.log(receivedNums);
-    let idNumList = [];
-    for (let i = 0; i < receivedNums.length; i++){
-        idNumList.push(parseInt(receivedNums[i]));
-    }
-    Character.find({charId: {$in: [idNumList]}}).then( (result) => {
+    Character.find({charId: receivedNums}).then( (result) => {
         response.json(result);
     });
 });

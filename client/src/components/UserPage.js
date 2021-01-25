@@ -4,6 +4,7 @@
 // imports
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import UserContext from "../UserContext";
 
 // function to call database to retrieve user-associated content
 const getUserData = async (userToken) => {
@@ -19,13 +20,12 @@ const getUserData = async (userToken) => {
 }
 
 // function to update user-associated content (for removing a tracked character)
-const removeUserChar = async (charId) =>{
-    let userId = userInfo.userIdentity;
-    let newCharList = userInfo.savedCharacters.filter(function (idNumber){
+const removeUserChar = async (userInfo, charId) =>{
+        let newCharList = userInfo.savedCharacters.filter(function (idNumber){
         return idNumber !== charId;
     });
     try {
-        let response = await axios.put("/api/user/characters/remove", {userId: userId, idList: newCharList});
+        let response = await axios.put("/api/user/characters/remove", {userId: userInfo.userIdentity, idList: newCharList});
         if (response.data !== null){
             return response.data;
         }
@@ -39,15 +39,15 @@ function handleClickRemove(event){
     event.preventDefault();
 
     // call removeuserchar
-    removeUserChar(event.target.dataset.char);
+    removeUserChar(event.target.dataset.user, event.target.dataset.char);
 }
 
 // call API to get character information from server
 const getMongooseData = async (charIdList) => {
     try {
+        console.log(`searching for characters with IDs ${charIdList}`);
         let response = await axios.post(`/api/user/characters`, {data: charIdList});
         if (response.data !== null){
-            console.log(`The result is ${JSON.stringify(response.data)}`);
             return response.data;
         }
     } catch (error){
@@ -69,7 +69,6 @@ function UserPage(props){
         // get user data
         if (userId !== undefined){
             getUserData(userId).then( output => {
-                console.log(`retrieving user data: ${output}`);
                 setUserInfo(output);
             });
         }
@@ -78,9 +77,9 @@ function UserPage(props){
     useEffect(() => {
         // get character data
         if (userInfo !== undefined && userInfo.savedCharacters !== undefined){
-            console.log(`retrieving character data`);
+            console.log(`retrieving character data for user ${userInfo.userIdentity}`);
             getMongooseData(userInfo.savedCharacters).then(output => {
-                setRegisteredChars(registeredChars => [...registeredChars, output]);
+                 setRegisteredChars(output);
             });
         }
     },[userInfo]);
@@ -100,8 +99,8 @@ function UserPage(props){
                         <li key={entry.charId} className="list-group-item">
                             <img src={entry.charAvatar} alt={entry.charName} width="64" height="64"/>
                             &emsp; {entry.charName} &emsp; {entry.charServer}
-                            &emsp; <a href={"/character/" + entry.charId}><i class="fas fa-eye"></i> View</a>
-                            &emsp; <button onClick={handleClickRemove} data-char={entry.charId}><i className="fas fa-user-slash"></i> Untrack</button>
+                            &emsp; <a href={"/character/" + entry.charId}><i className="fas fa-eye"></i> View</a>
+                            &emsp; <button onClick={handleClickRemove} data-char={entry.charId} data-user={userInfo}><i className="fas fa-user-slash"></i> Untrack</button>
                         </li>
                     );
                 })
