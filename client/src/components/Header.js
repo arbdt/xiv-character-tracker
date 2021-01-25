@@ -4,6 +4,7 @@
 import React from "react";
 import {Link} from "react-router-dom";
 import logo from "../logo.png";
+import AuthNav from "./AuthNav";
 
 // define component
 function Header(){
@@ -22,7 +23,8 @@ function Header(){
                         <Link to={`/user/test`} className="nav-link">User Page</Link>
                     </li>
                 </ul>
-                <button>Login/out button would go here if it worked</button>
+                
+                <AuthNav></AuthNav>
             </nav>
         </header>
     );
