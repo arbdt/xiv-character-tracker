@@ -20,7 +20,7 @@ function Header(){
                         <Link className="nav-link" to="/search">Search</Link>
                     </li>
                     <li className="nav-item">
-                        <Link to={`/user/test`} className="nav-link">User Page</Link>
+                        <Link to={`/user`} className="nav-link">User Page</Link>
                     </li>
                 </ul>
                 
