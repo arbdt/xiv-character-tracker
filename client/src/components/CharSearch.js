@@ -1,6 +1,10 @@
 // This component is a search form in which users can enter a character name and choose a server name, which will be passed to the API.
+
+// imports
 import React, {Component} from "react";
+import {withAuth0} from "@auth0/auth0-react";
 import XIVAPI from "xivapi-js";
+import Axios from "axios";
 const xiv = new XIVAPI();
 
 // define component
@@ -12,7 +16,7 @@ class CharSearch extends Component {
         this.state = {
             charName: "",
             serverName: "",
-            searchResults: []
+            searchResults: [],
         };
 
         // bind methods
@@ -55,8 +59,59 @@ class CharSearch extends Component {
         });
     }
 
+    // character save to user method
+    async saveCharToUser(user, character){
+        // save to user profile via api
+        console.log(`Saving character to user's profile...`);
+        try {
+            let userResult = await Axios.put("/api/user/characters/add", {userId: user, charId: character});
+            if (userResult.data !== null){
+                console.log("User data saved successfully.");
+            }
+        } catch (error){
+            console.error(error);
+        }
+    }
+
+    // save character to database
+    async saveCharToDatabase(id, name, server, avatar){
+        console.log("Saving character to Database...");
+        //transform server name format "Server (Data Center)" into "Server"
+        let serverSplitName = server.split(" ", 1);
+        let serverShortName = serverSplitName[0];
+        try {
+            // call Axios to character API
+            let characterResult = await Axios.post("/api/character", {
+                charId: id,
+                charName: name,
+                charServer: serverShortName,
+                charAvatar: avatar
+            });
+            if (characterResult.data !== null){
+                console.log("Character data saved successfully.");
+            }
+        } catch (error) {
+            console.log (error);
+        }
+    }
+
+    // handle saving character to user and database
+    handleCharSave = (e) => {
+        e.preventDefault();
+
+        // run method to associate character id with user data
+        this.saveCharToUser(e.target.dataset.user, e.target.dataset.charid);
+
+        // run method to save character record to server
+        this.saveCharToDatabase(e.target.dataset.charid, e.target.dataset.charname, e.target.dataset.charserver, e.target.dataset.charavatar);
+           
+    }
+
 // define component output
 render(){
+    //auth0 hook for user details
+    const {user} = this.props.auth0;
+
     return (
         <div className="card m-4">
             <form className="form card-body" onSubmit={this.handleSubmit}>{/* form for searching via API */}
@@ -83,7 +138,13 @@ render(){
                             <li className="list-group-item" key={entry.ID}>
                                 <img src={entry.Avatar} alt={entry.Name} width="64" height="64"/>
                                 &emsp; {entry.Name}
-                                &emsp; <a href={"/character/" + entry.ID}><i className="fas fa-eye"></i> View</a>
+                                &emsp; {entry.Server}
+                                &emsp; <a className="btn btn-primary" href={"/character/" + entry.ID}><i className="fas fa-eye"></i> View</a> &emsp; 
+                                {user !== undefined && 
+                                <button className="btn btn-success" onClick={this.handleCharSave} data-user={user.sub}
+                                 data-charid={entry.ID} data-charname={entry.Name} data-charserver={entry.Server} data-charavatar={entry.Avatar}>
+                                    <i className="fas fa-user-plus"></i> Track
+                                </button>}
                             </li>
                         );
                     })
@@ -96,4 +157,4 @@ render(){
 
 }
 // export module
-export default CharSearch;
+export default withAuth0(CharSearch);
