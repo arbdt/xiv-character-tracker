@@ -1,10 +1,12 @@
 // this component is displayed to logged-in users
 // it will display a list of saved characters with options to delete or refresh each character, or click on a character for details
 
-// imports
+// imports ----
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import UserContext from "../UserContext";
+import {useAuth0} from "@auth0/auth0-react";
+
+// additional functions ----
 
 // function to call database to retrieve user-associated content
 const getUserData = async (userToken) => {
@@ -21,11 +23,8 @@ const getUserData = async (userToken) => {
 
 // function to update user-associated content (for removing a tracked character)
 const removeUserChar = async (userInfo, charId) =>{
-        let newCharList = userInfo.savedCharacters.filter(function (idNumber){
-        return idNumber !== charId;
-    });
     try {
-        let response = await axios.put("/api/user/characters/remove", {userId: userInfo.userIdentity, idList: newCharList});
+        let response = await axios.put("/api/user/characters/remove", {userId: userInfo.userIdentity, charId: charId});
         if (response.data !== null){
             return response.data;
         }
@@ -55,24 +54,40 @@ const getMongooseData = async (charIdList) => {
     }
 }
 
-
-
-// define component
+// define component -----
 function UserPage(props){
+    // get Auth0 data
+    const {user, isAuthenticated, isLoading} = useAuth0();
+
+    // set userID from user object
+    let userId = "";
+    console.log(`isAuthenticated: ${isAuthenticated}`);
+    if (!isAuthenticated){
+        console.log(`isLoading: ${isLoading}`);
+    }
+    if(isAuthenticated){
+        //if (!isLoading){
+            userId = user.sub;
+        //}
+    }
+
     // vars and states
-    let userId = props.match.params.userId; // user identification
+    //let userId; //= (user !== {}? userSubstring : ""); // user identification
     let [userInfo, setUserInfo] = useState();
     let [registeredChars, setRegisteredChars] = useState([]);
 
-    // useEffects
+    // useEffects ----
     useEffect(() => {
         // get user data
-        if (userId !== undefined){
-            getUserData(userId).then( output => {
-                setUserInfo(output);
-            });
+        if (isAuthenticated){
+            if (userId !== ""){
+                getUserData(userId).then( output => {
+                    setUserInfo(output);
+                    console.log(`userInfo: ${userInfo}`);
+                });
+            }
         }
-    },[userId]);
+    },[userId, isAuthenticated]);
 
     useEffect(() => {
         // get character data
@@ -86,10 +101,10 @@ function UserPage(props){
 
     return(
     // display list of registered characters
-    // click through to dislay Character Sheet,
-    // or delete or update
+    // click through to display Character Sheet,
+    // or remove saved character
     <div>
-        <h3>Welcome User {userInfo !== undefined? userInfo.userIdentity : ""}!</h3>
+        <h3>Welcome User {userId !== ""? userId : ""}!</h3>
         <p>{registeredChars.length !== 0 ?  "You've saved the following characters in our database:" : "You have no saved characters."}</p>
 
         <div>
@@ -99,8 +114,8 @@ function UserPage(props){
                         <li key={entry.charId} className="list-group-item">
                             <img src={entry.charAvatar} alt={entry.charName} width="64" height="64"/>
                             &emsp; {entry.charName} &emsp; {entry.charServer}
-                            &emsp; <a href={"/character/" + entry.charId}><i className="fas fa-eye"></i> View</a>
-                            &emsp; <button onClick={handleClickRemove} data-char={entry.charId} data-user={userInfo}><i className="fas fa-user-slash"></i> Untrack</button>
+                            &emsp; <a className="btn btn-primary" href={"/character/" + entry.charId}><i className="fas fa-eye"></i> View</a>
+                            &emsp; <button className= "btn btn-danger" onClick={handleClickRemove} data-char={entry.charId} data-user={userInfo}><i className="fas fa-user-minus"></i> Untrack</button>
                         </li>
                     );
                 })
