@@ -21,7 +21,8 @@ app.use(express.urlencoded({extended: true}));
 app.use(routes);
 
 // connect to mongo(ose) DB
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/xivtracker");
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/xivtracker", { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.set('useFindAndModify', false);
 
 // Send every request to the React app
 // Define any API routes before this runs
