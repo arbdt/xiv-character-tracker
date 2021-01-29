@@ -13,7 +13,7 @@ function Main(){
             <h1 className="display-4">FFX|V Character Tracker</h1>
             <p className="lead">Welcome to the X|V Character Tracker. Use the form below to find and display the profile of a character.</p>
             <hr className="my-4"/>
-            <p>Log in using [insert authorisation service here] to save a character's current stats for comparison.</p>
+            <p>Log in to save a character's current stats for comparison.</p>
             <div className="lead"><CharSearch></CharSearch></div>
         </div>
     );
