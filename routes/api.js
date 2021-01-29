@@ -16,16 +16,34 @@ router.get("/api/user/:userId", function(request, response){
     });
 });
 
-// create user-related records
+// create user-related record if not already exist
+router.post("/api/user", function (request, response){
+    let newUser = {
+        userIdentity: request.body.userId,
+        savedCharacters: []
+    };
+    User.find({userIndentity: request.body.userId}).then( (result) => {
+        if (result === null){
+            User.create(newUser).then ( result => {
+                response.json(result);
+            });
+        }
+    });
+});
 
 // update records (remove a character from user)
 router.put("/api/user/characters/remove", function (request, response){
-    User.findOneAndUpdate({userIdentity: request.body.userId},{savedCharacters: request.body.idList}, {new: true}).then( result => {
+    User.findOneAndUpdate({userIdentity: request.body.userId}, {$pull: {savedCharacters: request.body.charId}}, {new: true}).then( result => {
         response.json(result);
     });
 });
 
 // update record (add a character to user)
+router.put("/api/user/characters/add", function (request, response){
+    User.findOneAndUpdate({userIdentity: request.body.userId}, {$push: {savedCharacters: request.body.charId}}, {new: true}).then( result => {
+        response.json(result);
+    });
+});
 
 // CHARACTER API -----
 
