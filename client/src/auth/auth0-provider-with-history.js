@@ -21,7 +21,6 @@ const Auth0ProviderWithHistory = ({ children }) => {
       onRedirectCallback={onRedirectCallback}
     >
       {children}
-      //{console.log(`domain: ${domain}; clientId: ${clientId}`)}{/* testing purposes only*/}
     </Auth0Provider>
   );
 };
