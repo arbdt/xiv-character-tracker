@@ -104,6 +104,15 @@ function CharacterSheet(props){
         }
     }
 
+    // button handler
+    const handleSaveBtn = (event) => {
+        event.preventDefault();
+
+        saveCharData(freshCharacter);
+
+        event.target.className="btn btn-secondary";
+    }
+
     // function to save data
     const saveCharData = (character) => {
     // post character data to db
@@ -113,11 +122,11 @@ function CharacterSheet(props){
 
     // component output -----
     return(
-        <div className="card characterSheet">
+        <div className="card m-4 characterSheet">
             <h3 className="card-title">{freshCharacter.charName !== ""?  `${freshCharacter.charName} of ${freshCharacter.charServer}` : `Loading data...`} </h3>
             
             <div className="card-body">
-            <button className="btn btn-success" onClick={() => saveCharData(freshCharacter)}><i className="fas fa-save"></i> Click here to manually save data.</button>
+            <button className="btn btn-success" onClick={handleSaveBtn}><i className="fas fa-save"></i> Click here to manually save data.</button>
                 <div className="row">
                     <div className="col-4">
                         <img src={freshCharacter.charAvatar} alt={freshCharacter.charName}/>
@@ -129,7 +138,11 @@ function CharacterSheet(props){
                             <span className="trackedChange"> +{freshCharacter.mountCount - oldCharacter.mountCount}</span> : <></>}</p>
                     </div>
                 </div>
-                <div className="row row-cols-sm-2">
+                <div className="container">
+                    <div className="row">
+                        <h4>Classes and Jobs:</h4>
+                    </div>
+                    <div className="row row-cols-4">
                         {freshCharacter.charClasses !== undefined? freshCharacter.charClasses.map( (classJob) => {
                             let oldJob = {};
                             if (oldCharacter !== undefined){
@@ -143,6 +156,7 @@ function CharacterSheet(props){
                                 <ClassJob newJobData={classJob} oldJobData={oldJob} key={classJob.classjobName}></ClassJob>
                             );
                         }) : <></>}
+                    </div>
                 </div>  
             </div>
         </div>
