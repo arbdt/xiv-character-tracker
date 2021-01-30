@@ -8,7 +8,7 @@ const {Character} = require("../models/character");
 
 // USER API -----
 
-// get user-related records
+// get user-related record
 router.get("/api/user/:userId", function(request, response){
     let userIdent = request.params.userId;
     User.findOne({userIdentity: userIdent}).then( (result) => {
@@ -20,18 +20,16 @@ router.get("/api/user/:userId", function(request, response){
 router.post("/api/user", function (request, response){
     let newUser = {
         userIdentity: request.body.userId,
-        savedCharacters: []
+        savedCharacters: request.body.savedCharacters
     };
-    User.find({userIndentity: request.body.userId}).then( (result) => {
-        if (result === null){
-            User.create(newUser).then ( result => {
-                response.json(result);
-            });
-        }
+    User.findOneAndUpdate({userIndentity: request.body.userId},
+        newUser,
+        {upsert: true, new: true}).then( (result) => {
+        response.json(result);
     });
 });
 
-// update records (remove a character from user)
+// update record (remove a character from user)
 router.put("/api/user/characters/remove", function (request, response){
     User.findOneAndUpdate({userIdentity: request.body.userId}, {$pull: {savedCharacters: request.body.charId}}, {new: true}).then( result => {
         response.json(result);
@@ -47,7 +45,7 @@ router.put("/api/user/characters/add", function (request, response){
 
 // CHARACTER API -----
 
-// get character data
+// get character data (individual, for character sheet)
 router.get("/api/character/:characterId", function( request, response){
     let idNum = parseInt(request.params.characterId);
     Character.findOne({charId: idNum}).then( (result) => {
@@ -55,7 +53,7 @@ router.get("/api/character/:characterId", function( request, response){
     });
 });
 
-// get character data for user page list
+// get character data (multiple, for user page list)
 router.post("/api/user/characters", function (request, response){
     let receivedNums = request.body.data;
     Character.find({charId: receivedNums}).then( (result) => {
@@ -63,9 +61,10 @@ router.post("/api/user/characters", function (request, response){
     });
 });
 
-// post new character data, or update if already exists
+// post new character data to database, or update if already exists
 router.post("/api/character", function (request, response){
-    let newCharacter = {
+    // store details for insertion
+    let newCharacterDetails = {
         charId: request.body.charId,
         charName: request.body.charName,
         charServer: request.body.charServer,
@@ -77,29 +76,13 @@ router.post("/api/character", function (request, response){
         dateUpdated: Date.now()
     };
 
-    Character.findOne({charId: request.body.charId}).then(result => {
-        if (result !== null){
-            // if entry exists, update properties
-            result.charName = request.body.charName;
-            result.charServer = request.body.charServer;
-            result.charAvatar = request.body.charAvatar;
-            result.charPortrait = request.body.charPortrait;
-            result.charClasses = request.body.charClasses;
-            result.minionCount = request.body.minionCount;
-            result.mountCount = request.body.mountCount;
-            result.dateUpdated = Date.now();
-            
-            // save changes
-            result.save().then( output => {
-                response.json(output);
-            });
-        }
-        else if (result === null){
-            Character.create(newCharacter).then( result => {
-                response.json(result);
-            });
-        }
-    });
+    // run update if exists or insert if not
+    Character.findOneAndUpdate(
+        {charId: request.body.charId},
+        newCharacterDetails,
+        {upsert: true, new: true, setDefaultsOnInsert: true}).then( result => {
+            response.json(result);
+        });
 });
 
 // export module
