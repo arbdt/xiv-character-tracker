@@ -19,10 +19,9 @@ router.get("/api/user/:userId", function(request, response){
 // create user-related record if not already exist
 router.post("/api/user", function (request, response){
     let newUser = {
-        userIdentity: request.body.userId,
-        savedCharacters: request.body.savedCharacters
+        userIdentity: request.body.userId
     };
-    User.findOneAndUpdate({userIndentity: request.body.userId},
+    User.findOneAndUpdate({userIdentity: request.body.userId},
         newUser,
         {upsert: true, new: true}).then( (result) => {
         response.json(result);
