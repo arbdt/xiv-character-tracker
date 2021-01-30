@@ -111,7 +111,7 @@ render(){
             <div className="card-body">
                 <p className="card-text">Only the first 50 results are displayed. If the character you seek is not listed, please refine your search.</p>
                 <ul className="list-group"> {/* list to display results of search */}
-                    {this.state.searchResults !== undefined ? this.state.searchResults.map( (entry) => {
+                    {this.state.searchResults !== undefined && this.state.searchResults.length > 0 ? this.state.searchResults.map( (entry) => {
                         return (
                             <li className="list-group-item d-flex justify-content-between align-items-center" key={entry.ID}>
                                 <img src={entry.Avatar} alt={entry.Name} width="64" height="64"/>
@@ -126,7 +126,7 @@ render(){
                             </li>
                         );
                     })
-                    : <></>}
+                    : <p>No search results to display.</p>}
                 </ul>
             </div>
         </div>
