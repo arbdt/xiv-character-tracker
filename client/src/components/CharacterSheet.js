@@ -7,13 +7,14 @@ import axios from "axios";
 import {useAuth0} from "@auth0/auth0-react";
 import XIVAPI from "xivapi-js";
 const xiv = new XIVAPI();
-const {isAuthenticated} = useAuth0;
+
 
 
 // define component -----
 function CharacterSheet(props){
     // vars
     let characterId = props.match.params.charId; // get charId from URL
+    const {user} = useAuth0;
     
     // useState to store xivapi character data
     let [freshCharacter, setFreshCharacter] = useState({
@@ -130,9 +131,11 @@ function CharacterSheet(props){
     return(
         <div className="card m-4 characterSheet">
             <div className="card-body">
-                <h3 className="card-title">{freshCharacter.charName !== ""?  `${freshCharacter.charName} of ${freshCharacter.charServer}` : `Loading data...`} </h3>
-                {isAuthenticated? 
-                <button className="btn btn-success" onClick={handleSaveBtn}><i className="fas fa-save"></i> Click here to manually save data.</button> : <></>}
+                <h3 className="card-title">{freshCharacter.charName !== ""?  `${freshCharacter.charName} of ${freshCharacter.charServer}` : `Loading data...`}
+                    &emsp;
+                    {user !== undefined && 
+                    <button className="btn btn-success" onClick={handleSaveBtn}><i className="fas fa-save"></i> Click here to manually save data.</button> }
+                </h3>
                 <div className="row">
                     <div className="col-4">
                         <img src={freshCharacter.charAvatar} alt={freshCharacter.charName}/>
