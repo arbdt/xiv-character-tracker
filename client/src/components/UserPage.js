@@ -108,7 +108,7 @@ function UserPage(props){
     // or remove saved character
     <div className="card m-4">
         <div className="card-body">
-            <h3 className="card-title">Welcome User Remove Later {userId !== ""? userId : ""}!</h3>
+            <h3 className="card-title">Your Characters</h3>
             <p className="card-text">{savedCharData.length !== 0 ?  "You've saved the following characters in our database:" : "You have no saved characters."}</p>
 
             <div>
