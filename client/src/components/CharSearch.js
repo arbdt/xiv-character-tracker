@@ -73,37 +73,12 @@ class CharSearch extends Component {
         }
     }
 
-    // save character to database
-    async saveCharToDatabase(id, name, server, avatar){
-        console.log("Saving character to Database...");
-        //transform server name format "Server (Data Center)" into "Server"
-        let serverSplitName = server.split(" ", 1);
-        let serverShortName = serverSplitName[0];
-        try {
-            // call Axios to character API
-            let characterResult = await Axios.post("/api/character", {
-                charId: id,
-                charName: name,
-                charServer: serverShortName,
-                charAvatar: avatar
-            });
-            if (characterResult.data !== null){
-                console.log("Character data saved successfully.");
-            }
-        } catch (error) {
-            console.log (error);
-        }
-    }
-
-    // handle saving character to user and database
+    // handle saving character to user
     handleCharSave = (e) => {
         e.preventDefault();
 
         // run method to associate character id with user data
         this.saveCharToUser(e.target.dataset.user, e.target.dataset.charid);
-
-        // run method to save character record to server
-        this.saveCharToDatabase(e.target.dataset.charid, e.target.dataset.charname, e.target.dataset.charserver, e.target.dataset.charavatar);
 
         e.target.className="btn btn-secondary";
            
