@@ -104,6 +104,8 @@ class CharSearch extends Component {
 
         // run method to save character record to server
         this.saveCharToDatabase(e.target.dataset.charid, e.target.dataset.charname, e.target.dataset.charserver, e.target.dataset.charavatar);
+
+        e.target.className="btn btn-secondary";
            
     }
 
@@ -129,13 +131,14 @@ render(){
                             })}
                         </datalist>
                 </div>
-                <button className="btn" type="submit"><i className="fas fa-search"></i> Search</button>
+                <button className="btn btn-success" type="submit"><i className="fas fa-search"></i> Search</button>
             </form>
-            <div>
+            <div className="card-body">
+                <p className="card-text">Only the first 50 results are displayed. If the character you seek is not listed, please refine your search.</p>
                 <ul className="list-group"> {/* list to display results of search */}
                     {this.state.searchResults !== undefined ? this.state.searchResults.map( (entry) => {
                         return (
-                            <li className="list-group-item" key={entry.ID}>
+                            <li className="list-group-item d-flex justify-content-between align-items-center" key={entry.ID}>
                                 <img src={entry.Avatar} alt={entry.Name} width="64" height="64"/>
                                 &emsp; {entry.Name}
                                 &emsp; {entry.Server}
