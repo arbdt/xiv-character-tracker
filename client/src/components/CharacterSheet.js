@@ -4,8 +4,10 @@
 import React, {useEffect, useState} from "react";
 import ClassJob from "./ClassJob";
 import axios from "axios";
+import {useAuth0} from "@auth0/auth0-react";
 import XIVAPI from "xivapi-js";
 const xiv = new XIVAPI();
+const {isAuthenticated} = useAuth0;
 
 
 // define component -----
@@ -116,17 +118,21 @@ function CharacterSheet(props){
     // function to save data
     const saveCharData = (character) => {
     // post character data to db
-        axios.post(`/api/character`, character);
+        axios.post(`/api/character`, character).then( output => {
+            if (output !== null){
+                console.log("Character data has been saved.")
+            }
+        });
     }
 
 
     // component output -----
     return(
         <div className="card m-4 characterSheet">
-            <h3 className="card-title">{freshCharacter.charName !== ""?  `${freshCharacter.charName} of ${freshCharacter.charServer}` : `Loading data...`} </h3>
-            
             <div className="card-body">
-            <button className="btn btn-success" onClick={handleSaveBtn}><i className="fas fa-save"></i> Click here to manually save data.</button>
+                <h3 className="card-title">{freshCharacter.charName !== ""?  `${freshCharacter.charName} of ${freshCharacter.charServer}` : `Loading data...`} </h3>
+                {isAuthenticated? 
+                <button className="btn btn-success" onClick={handleSaveBtn}><i className="fas fa-save"></i> Click here to manually save data.</button> : <></>}
                 <div className="row">
                     <div className="col-4">
                         <img src={freshCharacter.charAvatar} alt={freshCharacter.charName}/>
@@ -145,7 +151,7 @@ function CharacterSheet(props){
                     <div className="row row-cols-4">
                         {freshCharacter.charClasses !== undefined? freshCharacter.charClasses.map( (classJob) => {
                             let oldJob = {};
-                            if (oldCharacter !== undefined){
+                            if (oldCharacter !== undefined && oldCharacter.charClasses !== []){
                                 for (const job of oldCharacter.charClasses){
                                     if (job.classjobFullname === classJob.classjobFullname){
                                         oldJob = job;
