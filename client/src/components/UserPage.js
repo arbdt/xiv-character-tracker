@@ -82,7 +82,10 @@ function UserPage(props){
         // call removeuserchar
         removeUserChar(event.target.dataset.user, event.target.dataset.char).then( output => {
             setSavedCharIds(output.savedCharacters);
+
         });
+
+        event.target.className = "btn btn-secondary";
     }
 
     // call API to get character information from server
@@ -103,24 +106,26 @@ function UserPage(props){
     // display list of registered characters
     // click through to display Character Sheet,
     // or remove saved character
-    <div className="card">
-        <h3 className="card-title">Welcome User {userId !== ""? userId : ""}!</h3>
-        <p className="card-text">{savedCharData.length !== 0 ?  "You've saved the following characters in our database:" : "You have no saved characters."}</p>
+    <div className="card m-4">
+        <div className="card-body">
+            <h3 className="card-title">Welcome User Remove Later {userId !== ""? userId : ""}!</h3>
+            <p className="card-text">{savedCharData.length !== 0 ?  "You've saved the following characters in our database:" : "You have no saved characters."}</p>
 
-        <div>
-            <ul className="list-group"> {/* list to display results of search */}
-                {savedCharData.length !== 0 && savedCharData[0] !== undefined ? savedCharData.map( (entry) => {
-                    return (
-                        <li key={entry.charId} className="list-group-item">
+            <div>
+                <ul className="list-group charList"> {/* list to display results of search */}
+                    {savedCharData.length !== 0 && savedCharData[0] !== undefined ? savedCharData.map( (entry) => {
+                        return (
+                        <li key={entry.charId} className="list-group-item d-flex justify-content-between align-items-center">
                             <img src={entry.charAvatar} alt={entry.charName} width="64" height="64"/>
                             &emsp; {entry.charName} &emsp; {entry.charServer}
                             &emsp; <a className="btn btn-primary" href={"/character/" + entry.charId}><i className="fas fa-eye"></i> View</a>
                             &emsp; <button className= "btn btn-danger" onClick={handleClickRemove} data-char={entry.charId} data-user={userId}><i className="fas fa-user-minus"></i> Untrack</button>
                         </li>
-                    );
-                })
-                : <></>}
-            </ul>
+                        );
+                    })
+                    : <></>}
+                </ul>
+            </div>
         </div>
     </div>
     );
