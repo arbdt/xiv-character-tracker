@@ -13,7 +13,9 @@ function Main(){
             <h1 className="display-4">FFX|V Character Tracker</h1>
             <p className="lead">Welcome to the X|V Character Tracker. Use the form below to find and display the profile of a character.</p>
             <hr className="my-4"/>
-            <p>Log in to save a character's current stats for comparison.</p>
+            <p>To track a character's progress, first log in using the  button above. Search for a character and click "Track" to register them to your user profile.
+                Then, click "View" to access the character's profile. Click "Save" to store the character's current data for later comparison.
+            </p>
             <div className="lead"><CharSearch></CharSearch></div>
         </div>
     );
