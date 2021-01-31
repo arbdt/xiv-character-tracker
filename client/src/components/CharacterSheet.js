@@ -103,7 +103,7 @@ function CharacterSheet(props){
     // function to retrieve data from XIVAPI
     const getXivapiData = async (char_id) => {
         try{
-            let result = await xiv.character.get(char_id);
+            let result = await xiv.character.get(char_id, {data:"cj,mimo"});
             return result;
         } catch(error) {
             console.error(error);
