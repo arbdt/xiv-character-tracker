@@ -14,8 +14,22 @@ const xiv = new XIVAPI();
 function CharacterSheet(props){
     // vars
     let characterId = props.match.params.charId; // get charId from URL
-    const {user} = useAuth0;
+    const {user} = useAuth0();
     
+    // useState to store database character data
+    let [oldCharacter, setOldCharacter] = useState({
+        charId: 0,
+        charName: "Unable to Retrieve",
+        charServer: "Unable to Retrieve",
+        charAvatar: "",
+        charPortrait: "",
+        charClasses: [],
+        achievementCount: 0,
+        achievementPoints: 0,
+        minionCount: 0,
+        mountCount: 0,
+    });
+
     // useState to store xivapi character data
     let [freshCharacter, setFreshCharacter] = useState({
         charId: 0,
@@ -29,36 +43,39 @@ function CharacterSheet(props){
         minionCount: 0,
         mountCount: 0,
     });
-
-    // useState to store database character data
-    let [oldCharacter, setOldCharacter] = useState({
-        charId: 0,
-        charName: "",
-        charServer: "",
-        charAvatar: "",
-        charPortrait: "",
-        charClasses: [],
-        achievementCount: 0,
-        achievementPoints: 0,
-        minionCount: 0,
-        mountCount: 0,
-    });
+    
+    // useEffect to call local database
+    useEffect(() => {
+        // get database data
+        getMongooseData(characterId).then( result => {
+            let oldCharData = result;
+            console.log("Searching for existing data...");
+            console.log(oldCharData);
+            if (result !== undefined){
+                setOldCharacter(oldCharData);
+            }
+        });
+    }, [characterId]);
 
     // useEffect to call XIVAPI for new information
     useEffect( () =>{
 
         // get XIVAPI data
         getXivapiData(characterId).then( (result) => {
-            //console.log(result);
-            let jobList = result.Character.ClassJobs.map( (job) => {
-                return {
-                    charId: characterId,
-                    classjobName: job.UnlockedState.Name,
-                    classjobFullname: job.Name,
-                    classjobLevel: job.Level,
-                    currentExp: job.ExpLevel,
-                    maxExp: job.ExpLevelMax}
-            });
+            console.log(result);
+            let jobList; // store classJobs data
+            if (result.Character.ClassJobs !== null) {
+                jobList = result.Character.ClassJobs.map( (job) => {
+                    return {
+                        charId: characterId,
+                        classjobName: job.UnlockedState.Name,
+                        classjobFullname: job.Name,
+                        classjobLevel: job.Level,
+                        currentExp: job.ExpLevel,
+                        maxExp: job.ExpLevelMax
+                    }
+                });
+            }
             // make new character object from new data
             let newCharData = {
                 charId: characterId,
@@ -67,20 +84,20 @@ function CharacterSheet(props){
                 charAvatar: result.Character.Avatar,
                 charPortrait: result.Character.Portrait,
                 charClasses: jobList,
-                minionCount: result.Minions.length,
-                mountCount: result.Mounts.length
+                minionCount: (result.Minions !== null? result.Minions.length : null),
+                mountCount: (result.Mounts !== null? result.Mounts.length : null)
             };
-            // update state with new data
-            setFreshCharacter(newCharData);
-        });
+            // update state with new data, accounting for errors / missing data
+            if (newCharData.minionCount === null || newCharData.mountCount === null || newCharData.charClasses === null){
+                console.log("Error retrieving fresh data. Attempting to display backup data instead.")
+                setFreshCharacter(oldCharacter); // if new character data is missing, display old data if exists
+            } else {
+                setFreshCharacter(newCharData); // display newly obtained data
+            }
+        });    
+    },[characterId, oldCharacter]);
 
-        // get database data
-        getMongooseData(characterId).then( result => {
-            let oldCharData = result;
-            setOldCharacter(oldCharData);
-        });
     
-    },[characterId]);
 
     // additional functions -----
     // function to retrieve data from XIVAPI
@@ -134,7 +151,7 @@ function CharacterSheet(props){
                 <h3 className="card-title">{freshCharacter.charName !== ""?  `${freshCharacter.charName} of ${freshCharacter.charServer}` : `Loading data...`}
                     &emsp;
                     {user !== undefined && 
-                    <button className="btn btn-success" onClick={handleSaveBtn}><i className="fas fa-save"></i> Click here to manually save data.</button> }
+                    <button className="btn btn-success" onClick={handleSaveBtn}><i className="fas fa-save"></i> Save character data</button> }
                 </h3>
                 <div className="row">
                     <div className="col-4">
