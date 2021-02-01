@@ -10,7 +10,7 @@ import AuthNav from "./AuthNav";
 function Header(){
     return (
         <header className="header">
-            <nav className="navbar navbar-expand-lg navbar-light bg-light">
+            <nav className="navbar navbar-expand-lg navbar-dark bg-custom">
                 <a className="navbar-brand" href="/">
                     <img src={logo} width="30" height="30" className="d-inline-block align-top" alt="logo"/> XIV Character Tracker
                 </a>
