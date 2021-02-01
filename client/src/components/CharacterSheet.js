@@ -147,12 +147,13 @@ function CharacterSheet(props){
     // component output -----
     return(
         <div className="card m-4 characterSheet">
+            <h3 className="card-header">{freshCharacter.charName !== ""?  `${freshCharacter.charName} of ${freshCharacter.charServer}` : `Loading data...`}
+                &emsp;
+                {user !== undefined && 
+                <button className=" charSaveBtn btn btn-success" onClick={handleSaveBtn}><i className="fas fa-save"></i> Save character data</button> }
+            </h3>
             <div className="card-body">
-                <h3 className="card-title">{freshCharacter.charName !== ""?  `${freshCharacter.charName} of ${freshCharacter.charServer}` : `Loading data...`}
-                    &emsp;
-                    {user !== undefined && 
-                    <button className="btn btn-success" onClick={handleSaveBtn}><i className="fas fa-save"></i> Save character data</button> }
-                </h3>
+
                 <div className="row">
                     <div className="col-4">
                         <img src={freshCharacter.charAvatar} alt={freshCharacter.charName}/>
