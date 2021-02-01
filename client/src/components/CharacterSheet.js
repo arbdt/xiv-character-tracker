@@ -150,7 +150,7 @@ function CharacterSheet(props){
             <h3 className="card-header">{freshCharacter.charName !== ""?  `${freshCharacter.charName} of ${freshCharacter.charServer}` : `Loading data...`}
                 &emsp;
                 {user !== undefined && 
-                <button className=" charSaveBtn btn btn-success" onClick={handleSaveBtn}><i className="fas fa-save"></i> Save character data</button> }
+                <button className=" charSaveBtn btn btn-success" onClick={handleSaveBtn}><i className="fas fa-save"></i><span className="d-none d-md-inline"> Save current stats</span></button> }
             </h3>
             <div className="card-body">
 
@@ -169,7 +169,7 @@ function CharacterSheet(props){
                     <div className="row">
                         <h4>Classes and Jobs:</h4>
                     </div>
-                    <div className="row row-cols-4">
+                    <div className="row row-cols-3">
                         {freshCharacter.charClasses !== undefined? freshCharacter.charClasses.map( (classJob) => {
                             let oldJob = {};
                             if (oldCharacter !== undefined && oldCharacter.charClasses !== []){
