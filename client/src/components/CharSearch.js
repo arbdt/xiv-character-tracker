@@ -106,7 +106,7 @@ render(){
                             })}
                         </datalist>
                 </div>
-                <button className="btn btn-success" type="submit"><i className="fas fa-search"></i> Search</button>
+                <button className="btn btn-success" type="submit"><i className="fas fa-search"></i><span className="d-none d-md-inline"> Search</span></button>
             </form>
             <div className="card-body">
                 <p className="card-text">Only the first 50 results are displayed. If the character you seek is not listed, please refine your search.</p>
