@@ -16,7 +16,7 @@ function Main(){
             <p>To track a character's progress, first log in using the  button above. Search for a character and click "Track" to register them to your user profile.
                 Then, click "View" to access the character's profile. Click "Save" to store the character's current data for later comparison.
             </p>
-            <div className="lead"><CharSearch></CharSearch></div>
+            <CharSearch></CharSearch>
         </div>
     );
 }
