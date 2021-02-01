@@ -1,4 +1,6 @@
-/*Custom CSS Values*/
+/* Custom CSS Values */
+
+/* all pages */
 body {
   margin-bottom: 120px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -8,7 +10,16 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: #e6e6e6;
 }
+
+.card-header {
+  background-color: #333;
+  color:#eeeeee;
+}
+
 /* top of pages */
+header .bg-custom {
+  background-color: #333;
+}
 
 /* central page area components */
 /* main landing page */
@@ -17,11 +28,27 @@ body {
 }
 
 /* search page */
+.searchCard {
+  background-color: #eeeeee;
+  border-style: none;
+}
 
 /* user page */
-
+.userCard{
+  background-color: #eeeeee;
+  border-style: none;
+}
 
 /* character page */
+.characterSheet {
+  background-color: #eeeeee;
+  border-style: none;
+}
+
+.charSaveBtn {
+  float: right;
+}
+
 meter {
   width: 150px;
 }
