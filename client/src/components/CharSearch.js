@@ -90,9 +90,9 @@ render(){
     const {user} = this.props.auth0;
 
     return (
-        <div className="card m-4">
+        <div className="searchCard card m-4">
+            <h3 className="card-header">Search for a character</h3>
             <form className="form card-body" onSubmit={this.handleSubmit}>{/* form for searching via API */}
-                <h3 className="card-title">Search for a character</h3>
                 <div className="form-group">
                     <label htmlFor="charSearchInput">Character Name: </label>
                     <input className="form-control" type="text" id="charSearchInput" name="charName" onChange={this.handleInputChange} required/>
@@ -110,19 +110,30 @@ render(){
             </form>
             <div className="card-body">
                 <p className="card-text">Only the first 50 results are displayed. If the character you seek is not listed, please refine your search.</p>
-                <ul className="list-group"> {/* list to display results of search */}
+                <ul className="list-group resultList"> {/* list to display results of search */}
                     {this.state.searchResults !== undefined && this.state.searchResults.length > 0 ? this.state.searchResults.map( (entry) => {
                         return (
                             <li className="list-group-item d-flex justify-content-between align-items-center" key={entry.ID}>
-                                <img src={entry.Avatar} alt={entry.Name} width="64" height="64"/>
-                                &emsp; {entry.Name}
-                                &emsp; {entry.Server}
-                                &emsp; <a className="btn btn-primary" href={"/character/" + entry.ID}><i className="fas fa-eye"></i> View</a> &emsp; 
-                                {user !== undefined && 
-                                <button className="btn btn-success" onClick={this.handleCharSave} data-user={user.sub}
-                                 data-charid={entry.ID} data-charname={entry.Name} data-charserver={entry.Server} data-charavatar={entry.Avatar}>
-                                    <i className="fas fa-user-plus"></i> Track
-                                </button>}
+                                <div className="col">
+                                    <img src={entry.Avatar} alt={entry.Name} width="64" height="64"/>
+                                </div>
+                                <div className="col font-weight-bold">
+                                    {entry.Name}
+                                </div>
+                                <div className="col">
+                                    {entry.Server}
+                                </div>
+                                <div className="col">
+                                    <a className="btn btn-primary" href={"/character/" + entry.ID}><i className="fas fa-eye"></i><span className="d-none d-md-inline"> View</span></a>
+                                </div>
+                                <div className="col">
+                                    {user !== undefined && 
+                                    <button className="btn btn-success" onClick={this.handleCharSave} data-user={user.sub}
+                                    data-charid={entry.ID} data-charname={entry.Name} data-charserver={entry.Server} data-charavatar={entry.Avatar}>
+                                    <i className="fas fa-user-plus"></i><span className="d-none d-md-inline"> Track</span>
+                                    </button>}
+                                </div>
+                                
                             </li>
                         );
                     })
