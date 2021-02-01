@@ -49,6 +49,10 @@ header .bg-custom {
   float: right;
 }
 
+.jobCard {
+  border-style: none;
+}
+
 meter {
   width: 150px;
 }
