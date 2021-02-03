@@ -20,7 +20,7 @@ function UserPage(props){
     if(isAuthenticated){
         //if (!isLoading){
             userId = user.sub;
-            console.log(`userId set to: ${userId}`);
+            console.log(`userId is set.`);
         //}
     }
 
@@ -41,7 +41,7 @@ function UserPage(props){
     useEffect(() => {
         // get character data from user data
         if (userId !== "" && savedCharIds !== [] ){
-            console.log(`retrieving character data for user ${userId}`);
+            console.log(`Retrieving character data.`);
             getCharData(savedCharIds).then(output => {
                  setSavedCharData(output);
             });
@@ -64,7 +64,7 @@ function UserPage(props){
 
         // function to update user-associated content (for removing a tracked character)
     const removeUserChar = async (userId, charId) => {
-        console.log(`Attempting to remove character ${charId} from profile ${userId}`);
+        console.log(`Attempting to remove character ${charId} from profile.`);
         try {
             let response = await axios.put("/api/user/characters/remove", {userId: userId, charId: charId});
             if (response.data !== null){
@@ -91,7 +91,7 @@ function UserPage(props){
     // call API to get character information from server
     const getCharData = async (charIdList) => {
         try {
-            console.log(`searching for characters with IDs ${charIdList}`);
+            console.log(`Searching for characters with IDs ${charIdList}`);
             let response = await axios.post(`/api/user/characters`, {data: charIdList});
             if (response.data !== null){
                 return response.data;
