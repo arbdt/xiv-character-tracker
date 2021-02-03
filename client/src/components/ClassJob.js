@@ -15,13 +15,13 @@ function ClassJob(props){
         <div className="card m-2 jobCard">
             <div className="card-body">
                 <h4 className="card-title">{newJobData.classjobName}</h4>
-                <p className="card-text">Level: {newJobData.classjobLevel} {oldJobData.classjobLevel !== undefined && oldJobData.classjobLevel < newJobData.classjobLevel ?
-                <span className="trackedChange"> +{newJobData.classjobLevel - oldJobData.classjobLevel}</span> : <></>}</p>
+                <p className="card-text"><span className="font-weight-bold">Level:</span> {newJobData.classjobLevel} {oldJobData.classjobLevel !== undefined && oldJobData.classjobLevel < newJobData.classjobLevel ?
+                <span className="trackedChange"> (+{newJobData.classjobLevel - oldJobData.classjobLevel})</span> : <></>}</p>
                 <meter value={newJobData.currentExp} max={newJobData.maxExp}>
                     {newJobData.currentExp} / {newJobData.maxExp}
                 </meter>
-                <p className="card-text">Experience: {newJobData.currentExp} / {newJobData.maxExp} {newJobData.classjobLevel === oldJobData.classjobLevel && newJobData.currentExp > oldJobData.currentExp ?
-                <span className="trackedChange"> +{newJobData.currentExp - oldJobData.currentExp}</span> : <></>}</p>
+                <p className="card-text"><span className="font-weight-bold">Exp.:</span> {newJobData.currentExp} / {newJobData.maxExp} {newJobData.classjobLevel === oldJobData.classjobLevel && newJobData.currentExp > oldJobData.currentExp ?
+                <span className="trackedChange"> (+{newJobData.currentExp - oldJobData.currentExp})</span> : <></>}</p>
             </div>
         </div>
     </div>
