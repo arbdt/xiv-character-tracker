@@ -3,7 +3,7 @@
 // imports
 import React, {Component} from "react";
 import {withAuth0} from "@auth0/auth0-react";
-import XIVAPI from "xivapi-js";
+import XIVAPI from "@xivapi/js";
 import Axios from "axios";
 const xiv = new XIVAPI();
 
@@ -52,9 +52,8 @@ class CharSearch extends Component {
         e.preventDefault();
 
         // run search based on user input
-        console.log(`searching for ${this.state.charName} of ${this.state.serverName}`);
+        console.log(`Searching for ${this.state.charName} of ${this.state.serverName}`);
         xiv.character.search(this.state.charName, {server: this.state.serverName}).then( (response) => {
-            console.log(response);
             this.setState({searchResults: response.Results});
         });
     }
