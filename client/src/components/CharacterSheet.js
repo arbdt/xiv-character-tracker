@@ -5,7 +5,7 @@ import React, {useEffect, useState} from "react";
 import ClassJob from "./ClassJob";
 import axios from "axios";
 import {useAuth0} from "@auth0/auth0-react";
-import XIVAPI from "xivapi-js";
+import XIVAPI from "@xivapi/js";
 const xiv = new XIVAPI();
 
 
@@ -50,7 +50,6 @@ function CharacterSheet(props){
         getMongooseData(characterId).then( result => {
             let oldCharData = result;
             console.log("Searching for existing data...");
-            console.log(oldCharData);
             if (result !== undefined){
                 setOldCharacter(oldCharData);
             }
@@ -62,7 +61,7 @@ function CharacterSheet(props){
 
         // get XIVAPI data
         getXivapiData(characterId).then( (result) => {
-            console.log(result);
+            console.log("Retrieving character data from external sources.");
             let jobList; // store classJobs data
             if (result.Character.ClassJobs !== null) {
                 jobList = result.Character.ClassJobs.map( (job) => {
@@ -116,7 +115,6 @@ function CharacterSheet(props){
             let response = await axios.get(`/api/character/${character}`);
             if (response.data !== null){
                 // return the data if it exists
-                console.log(response.data);
                 return response.data;
             }
         } catch (error){
@@ -159,10 +157,10 @@ function CharacterSheet(props){
                         <img src={freshCharacter.charAvatar} alt={freshCharacter.charName}/>
                     </div>
                     <div className="col-8">
-                        <p>Minions: {freshCharacter.minionCount} {oldCharacter !== undefined && freshCharacter.minionCount > oldCharacter.minionCount ?
-                            <span className="trackedChange"> +{freshCharacter.minionCount - oldCharacter.minionCount}</span> : <></>}</p>
-                        <p>Mounts: {freshCharacter.mountCount} {oldCharacter !== undefined && freshCharacter.mountCount > oldCharacter.mountCount ?
-                            <span className="trackedChange"> +{freshCharacter.mountCount - oldCharacter.mountCount}</span> : <></>}</p>
+                        <p><span className="font-weight-bold">Minions:</span> {freshCharacter.minionCount} {oldCharacter !== undefined && freshCharacter.minionCount > oldCharacter.minionCount ?
+                            <span className="trackedChange"> (+{freshCharacter.minionCount - oldCharacter.minionCount})</span> : <></>}</p>
+                        <p><span className="font-weight-bold">Mounts:</span> {freshCharacter.mountCount} {oldCharacter !== undefined && freshCharacter.mountCount > oldCharacter.mountCount ?
+                            <span className="trackedChange"> (+{freshCharacter.mountCount - oldCharacter.mountCount})</span> : <></>}</p>
                     </div>
                 </div>
                 <div className="container">
