@@ -128,7 +128,7 @@ function CharacterSheet(props){
 
         saveCharData(freshCharacter);
 
-        event.target.className="btn btn-secondary";
+        event.target.className="charSaveBtn btn btn-secondary";
     }
 
     // function to save data
@@ -148,7 +148,7 @@ function CharacterSheet(props){
             <h3 className="card-header">{freshCharacter.charName !== ""?  `${freshCharacter.charName} of ${freshCharacter.charServer}` : `Loading data...`}
                 &emsp;
                 {user !== undefined && 
-                <button className=" charSaveBtn btn btn-success" onClick={handleSaveBtn}><i className="fas fa-save"></i><span className="d-none d-md-inline"> Save current stats</span></button> }
+                <button className="charSaveBtn btn btn-success" onClick={handleSaveBtn}><i className="fas fa-save"></i><span className="d-none d-md-inline"> Save current stats</span></button> }
             </h3>
             <div className="card-body">
 
